@@ -170,7 +170,7 @@
 | `patterns` | 12–14 | `term, meaning, example, source` | 从 GOLD_SENTENCES / MATCHING 提炼句式 |
 | `expressions` | 10–12 | `term, meaning, example, source` | 连接词、理念表达 |
 
-- `source` 标注来源（如 "Podcast Vocabulary" / "Phrase Detective"），方便溯源。
+- `source` 标注来源（如 "Podcast Vocabulary" / "Phrase Detective"），方便溯源。**注意：引擎已不再渲染 `source` 字段**（卡片底部标注已移除），但字段本身仍需保留在 data.js 中，用于结构完整性与未来扩展。
 
 ## 13. 框架行为规范（引擎逻辑，非 data.js 字段）
 
