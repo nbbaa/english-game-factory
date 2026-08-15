@@ -21,7 +21,7 @@ Vocabulary Blitz · Quote Fill-in · Phrase Match · Phrase Detective · Sentenc
 
 ## 快速开始 · Quick start
 
-### 方式一：直接玩示例（人类）
+### 方式一：直接玩示例（无需构建）
 Play the bundled sample (no build step):
 
 ```bash
