@@ -49,9 +49,9 @@ const GOLD_SENTENCES = {
     { en:"Little by little, you get better.", hint:"Small steps lead to improvement", blanks:[0,5] },
     { en:"Mistakes help you learn.", hint:"Errors are teachers", blanks:[0,3] },
     { en:"Speak a little every day.", hint:"Use your voice daily", blanks:[1,4] },
-    { en:"Consistency beats intensity.", hint:"Regular small effort wins over rare big effort", blanks:[0,3] },
-    { en:"Read something daily.", hint:"Look at English text each day", blanks:[0,3] },
-    { en:"Listen before you speak.", hint:"Hearing comes first", blanks:[0,4] },
+    { en:"Consistency beats intensity.", hint:"Regular small effort wins over rare big effort", blanks:[0,2] },
+    { en:"Read something daily.", hint:"Look at English text each day", blanks:[0,2] },
+    { en:"Listen before you speak.", hint:"Hearing comes first", blanks:[0,3] },
     { en:"Start where you are.", hint:"Begin from your current level", blanks:[1,3] },
   ],
   medium: [
@@ -59,7 +59,7 @@ const GOLD_SENTENCES = {
     { en:"You do not need to be perfect; you only need to keep going.", hint:"Progress matters more than perfection", blanks:[6,12] },
     { en:"Real fluency comes from using the language, not just studying it.", hint:"Speaking beats only reading books", blanks:[1,7] },
     { en:"What you practise in private shows up in public.", hint:"Hidden effort becomes visible skill", blanks:[2,8] },
-    { en:"Learning a language is a marathon, not a sprint.", hint:"It is a long journey, not a quick race", blanks:[4,9] },
+    { en:"Learning a language is a marathon, not a sprint.", hint:"It is a long journey, not a quick race", blanks:[4,8] },
     { en:"The more you use a word, the more it belongs to you.", hint:"Repetition builds ownership", blanks:[2,9] },
     { en:"Small daily wins build unshakable confidence.", hint:"Tiny victories create strong self-belief", blanks:[1,5] },
     { en:"Your ear learns before your mouth does.", hint:"Listening comes before speaking", blanks:[1,6] },
@@ -68,7 +68,7 @@ const GOLD_SENTENCES = {
     { en:"Exposure to real language trains your brain faster than memorising rules.", hint:"Real input beats rote grammar", blanks:[1,7] },
     { en:"Deliberate practice, not mindless repetition, is what sharpens a skill.", hint:"Focused effort beats empty drilling", blanks:[1,8] },
     { en:"The discomfort you feel while stretching is the feeling of growth itself.", hint:"Struggle means you are improving", blanks:[2,9] },
-    { en:"Vocabulary learned in context stays; vocabulary memorised in isolation fades.", hint:"Words in sentences stick, word lists slip away", blanks:[2,10] },
+    { en:"Vocabulary learned in context stays; vocabulary memorised in isolation fades.", hint:"Words in sentences stick, word lists slip away", blanks:[2,9] },
     { en:"Feedback is the compass that keeps your practice moving in the right direction.", hint:"Correction guides improvement", blanks:[0,8] },
     { en:"To think in a new language, you must first stop translating from your old one.", hint:"Stop converting in your head", blanks:[4,12] },
     { en:"Consistency, repeated over months, quietly outperforms bursts of motivation.", hint:"Steady habit beats short enthusiasm", blanks:[0,8] },
@@ -158,7 +158,7 @@ const WRITING_QUESTS = [
       { pattern: "instead of", hint: "instead of doing X, I will do Y" }
     ],
     minWords: 100,
-    modelAnswer: "To build a daily English routine, I will stay consistent rather than chase intense bursts. The more I immerse myself in real content, the more natural the language feels. Instead of memorising word lists, I will grow my vocabulary through reading and listening. Each day I will practise speaking out loud, even for ten minutes. Progress will come gradually, but it will come. The more I repeat this routine, the more confident I will become, and slowly English will stop feeling like a subject and start feeling like a tool I use."
+    modelAnswer: "To build a daily English routine, I will stay consistent rather than chase intense bursts. The more I immerse myself in real content, the more natural the language feels. Instead of memorising word lists, I will grow my vocabulary through reading and listening. Each day I will practise speaking out loud, even for ten minutes. Progress will come gradually, but it will come. The more I repeat this routine, the more confident I will become, and slowly English will stop feeling like a subject and start feeling like a tool I use. When I show up every day, even briefly, the habit becomes part of who I am."
   },
   {
     topic: "Write about why mistakes are useful when learning a language.",
@@ -178,7 +178,7 @@ const WRITING_QUESTS = [
       { pattern: "by doing", hint: "by doing X, you can achieve Y" }
     ],
     minWords: 100,
-    modelAnswer: "Reading and listening give me constant exposure to real English. The more I read, the more words I meet in meaningful context, and the more they stick. By listening to podcasts and videos, I train my ear before my mouth. I follow my curiosity and choose topics I actually enjoy, so learning never feels like work. I also pick a challenge just beyond my level — material that is a little too hard pushes me to grow. Over time, this steady diet of input is what makes a learner fluent. Input comes first; output follows naturally."
+    modelAnswer: "Reading and listening give me constant exposure to real English. The more I read, the more words I meet in meaningful context, and the more they stick. By listening to podcasts and videos, I train my ear before my mouth. I follow my curiosity and choose topics I actually enjoy, so learning never feels like work. I also pick a challenge just beyond my level — material that is a little too hard pushes me to grow. Over time, this steady diet of input is what makes a learner fluent. Input comes first; output follows naturally. That is how lasting fluency is truly built, step by step."
   }
 ];
 
