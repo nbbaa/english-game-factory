@@ -194,15 +194,30 @@
 - **UI**：游戏头部显示难度标签 `diff-chip`（绿/黄/红），结算页显示升降级提示 `diff-msg`（⬆️/⬇️/保持）。
 - **难度如何影响题目**：由各 `startXxx()` 根据当前等级选题或设干扰项——如 Blitz 高难取更生僻词、Match/Matching 高难增配对数或干扰项、Scramble/Builder 高难取更长句。
 
-## 14. 交付前检查清单
+## 14. data.js 安全序列化规范
+
+生成 `data.js` 时，字幕原文中的特殊字符可能导致 JS 语法错误或注入风险。**必须遵守**：
+
+1. **双引号转义**：所有字符串值用双引号包裹时，值内的双引号必须转义为 `\"`。
+2. **反斜杠转义**：值内的反斜杠 `\` 必须转义为 `\\`。
+3. **换行处理**：值内不能包含裸换行符。用 `\n` 转义，或将多行合并为一段。
+4. **`</script>` 注入防护**：任何字符串值中出现 `</script>` 必须拆写为 `<\/script>`，否则浏览器会提前关闭 `<script>` 标签，导致页面白屏。
+5. **推荐方式**：对复杂值（如长文本、词源故事）使用 `JSON.stringify()` 生成，确保自动转义。或使用模板字符串（反引号）但注意转义反引号和 `${}`。
+6. **验证**：生成后在 Node.js 中 `require` 或 `eval` 验证无语法错误，再跑回归测试。
+
+## 15. 交付前检查清单
 
 - [ ] 13 个数据常量全部生成（含 `GAME_META`），数量达标
 - [ ] 所有选择题 `options` 包含 `answer` 且只有 1 个正确项
-- [ ] `GOLD_SENTENCES` 的 `blanks` 下标不越界、easy/hard 不重复
+- [ ] `GOLD_SENTENCES` 的 `blanks` 下标不越界（`0 ≤ blank < wordCount`）、不重复
 - [ ] `SENTENCE_BUILDER` 无弱约束句对
 - [ ] `CLOZE_DATA` 的 `answers.length === parts.length - 1`
+- [ ] `WRITING_QUESTS` 的 `modelAnswer` 字数 ≥ `minWords`
+- [ ] `PARAPHRASE_TASKS` 每个 `model` 至少 5 词
+- [ ] `EXPANDER_TASKS` 的 `modelAnswer` 至少 30 词
 - [ ] `KNOWLEDGE_BANK.words` 用 `VOCAB.map` 复用
 - [ ] 各选择类游戏的 `state.<game>Difficulty` 默认为 1、结算升降级逻辑就位
 - [ ] Daily Streak 顶栏/streakInfo/toast/徽章均读 `calcStreakFromDates()` 派生值
-- [ ] `node tests/regression.test.js` 全绿
+- [ ] data.js 无裸换行、无未转义引号、无 `</script>` 注入
+- [ ] `node tests/regression.test.js` 全绿（91 项）
 - [ ] 部署并 curl 验证线上 data.js 是最新

@@ -16,8 +16,36 @@ A single-page HTML game app with 10 games (Vocabulary Blitz, Quote Fill-in, Phra
 ## Core Architecture
 
 - **Framework (fixed)**: `index.html` contains all game logic, loads content via `<script src="data.js"></script>`.
-- **Content (per material)**: `data.js` defines 12 data arrays: VOCAB, PHRASES, GOLD_SENTENCES, PHRASE_DETECTIVE, WRITING_QUESTS, SENTENCE_BUILDER, PARAPHRASE_TASKS, EXPANDER_TASKS, CLOZE_DATA, MATCHING_ENDINGS, KNOWLEDGE_BANK, FRAME_DATA.
+- **Content (per material)**: `data.js` defines 13 data arrays: GAME_META, VOCAB, PHRASES, GOLD_SENTENCES, PHRASE_DETECTIVE, WRITING_QUESTS, SENTENCE_BUILDER, PARAPHRASE_TASKS, EXPANDER_TASKS, CLOZE_DATA, MATCHING_ENDINGS, KNOWLEDGE_BANK, FRAME_DATA.
 - **To make a new game set**: only replace `data.js`. Never touch game logic.
+
+## Prerequisites — Framework Repo
+
+This skill depends on the **full framework repo**, not just the skill definition. The repo provides:
+
+| File | Purpose |
+|------|---------|
+| `game/index.html` | Game engine (10 games, fixed logic) |
+| `tests/regression.test.js` | 91-check regression suite |
+| `skills/english-game-factory/` | This skill (SKILL.md + content-spec + fetch script) |
+
+**Setup** (one-time, per machine):
+
+```bash
+git clone https://github.com/nbbaa/english-game-factory.git ~/english-game-factory
+# Then make the skill discoverable by your agent:
+# WorkBuddy:  cp -r ~/english-game-factory/skills/english-game-factory ~/.workbuddy/skills/
+# Claude Code: cp -r ~/english-game-factory/skills/english-game-factory ~/.claude/skills/
+# Codex:      cp -r ~/english-game-factory/skills/english-game-factory ~/.codex/skills/
+```
+
+**At runtime**, the skill needs to locate the repo to access `game/index.html` and `tests/regression.test.js`. The agent should:
+
+1. Check if `~/english-game-factory/game/index.html` exists — if so, use that path.
+2. If not, search common locations or ask the user: "Where did you clone the english-game-factory repo?"
+3. Once found, use `<repo>/game/index.html` as the engine and `<repo>/tests/regression.test.js` as the test suite.
+
+All paths below assume `REPO = <path-to-cloned-repo>`.
 
 ## Pipeline
 
@@ -49,18 +77,20 @@ Write `data.js` following `references/content-spec.md` exactly. Key rules:
 - SENTENCE_BUILDER must have no swappable/synonymous sentence pairs
 - `KNOWLEDGE_BANK.words` reuses VOCAB via `VOCAB.map(...)`
 - **`GOLD_SENTENCES` is a grouped object, not an array**: `{ easy: [...], medium: [...], hard: [...] }`, 8 sentences each. Other arrays are plain arrays.
+- **`GOLD_SENTENCES.blanks` must be in range**: each blank index must be `>= 0` and `< wordCount` where wordCount = `en.split(' ').length`. Blanks must not repeat. The regression test checks this.
+- **Safe JS serialization**: When writing `data.js`, escape all double quotes (`"` → `\"`), backslashes (`\` → `\\`), and newlines (`\n`) inside string values. A raw `</script>` in any string would break the page — replace with `<\/script>`. Use template literals or `JSON.stringify()` for complex values to avoid syntax errors.
 
 ### 4. Assemble and test
 
-- Place the new `data.js` next to the framework `index.html`.
-- Run the regression test suite (supports a target-directory argument):
-  - `node tests/regression.test.js` — tests the framework root (`data.js` + `podcast-english-game.html`)
-  - `node tests/regression.test.js <dir>` — tests a content directory, e.g. `node tests/regression.test.js ted-procrastination` or `node tests/regression.test.js english-game-factory/game`
-- All tests must pass. The suite validates: data constants exist, structures match spec, engine functions load without errors.
+- Place the new `data.js` next to the framework `index.html` (i.e., in `REPO/game/` or in a new content directory under the repo).
+- Run the regression test suite from the repo root:
+  - `node REPO/tests/regression.test.js game` — tests the bundled sample (`game/data.js` + `game/index.html`)
+  - `node REPO/tests/regression.test.js <dir>` — tests a custom content directory (relative to repo root)
+- All 91 checks must pass. The suite validates: data constants exist, structures match spec, blanks are in range and unique, CLOZE_DATA parts/answers align, choice questions have exactly one correct answer, model answers meet minimum word counts, and engine functions load without errors.
 
 ### 5. Deploy
 
-Deploy the directory containing `index.html` + `data.js` (+ optional study guide) as a static site.
+Deploy the content directory (containing `index.html` + `data.js`) as a static site. Copy `REPO/game/index.html` into your content directory first if it's not already there.
 
 - **WorkBuddy**: use the cloudstudio-deploy capability; returns a shareable link.
 - **Claude Code / Codex / other**: deploy with any static host (GitHub Pages, Vercel, Netlify). The app is pure front-end — just serve the folder.

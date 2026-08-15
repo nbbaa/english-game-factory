@@ -46,11 +46,22 @@ node tests/regression.test.js   # 必须全绿 / must pass
 
 This repo is also an **Agent Skill**. Once installed, hand your agent a YouTube link or a transcript and it runs the full pipeline: fetch subtitles → analyze per teaching plan → generate `data.js` → test → deploy.
 
-| Agent | 安装方式 · Install |
-|---|---|
-| **WorkBuddy** | 复制 `skills/english-game-factory/` 到 `~/.workbuddy/skills/` |
-| **Claude Code** | 复制 `skills/english-game-factory/` 到 `~/.claude/skills/` |
-| **Codex** | 复制 `skills/english-game-factory/` 到 `~/.codex/skills/` |
+**重要 · Important**: Skill 依赖完整仓库（`game/index.html` 引擎 + `tests/` 测试套件），不能只复制 `skills/` 子目录。请先 clone 整个仓库：
+
+The skill depends on the **full repo** (`game/index.html` engine + `tests/` suite). Clone the whole repo first, then register the skill with your agent:
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/nbbaa/english-game-factory.git ~/english-game-factory
+
+# 2. Register the skill with your agent (choose one):
+# WorkBuddy:
+cp -r ~/english-game-factory/skills/english-game-factory ~/.workbuddy/skills/
+# Claude Code:
+cp -r ~/english-game-factory/skills/english-game-factory ~/.claude/skills/
+# Codex:
+cp -r ~/english-game-factory/skills/english-game-factory ~/.codex/skills/
+```
 
 Skill 依赖一个字幕抓取脚本（`scripts/fetch_transcript.py`），需要 `pip install youtube-transcript-api`。
 The skill's transcript script needs `pip install youtube-transcript-api`.

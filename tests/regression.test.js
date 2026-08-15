@@ -142,13 +142,58 @@ if (GOLD) {
     ok(Array.isArray(GOLD[d]) && GOLD[d].length >= 8, `GOLD_SENTENCES.${d} ≥8 句`);
     ok(GOLD[d].every(q => q.en && q.hint && Array.isArray(q.blanks) && q.blanks.length === 2),
        `GOLD_SENTENCES.${d} 每条含 en/hint/blanks[2]`);
+    // blanks 下标范围 + 不重复检查
+    let blanksOk = true;
+    GOLD[d].forEach((q, i) => {
+      const words = q.en.split(" ");
+      const maxIdx = words.length - 1;
+      const inRange = q.blanks.every(b => b >= 0 && b <= maxIdx);
+      const unique = new Set(q.blanks).size === q.blanks.length;
+      if (!inRange || !unique) {
+        blanksOk = false;
+        console.error(`    ✗ ${d}[${i}] blanks=[${q.blanks}] maxIdx=${maxIdx} words=${words.length} "${q.en.slice(0,50)}"`);
+      }
+    });
+    ok(blanksOk, `GOLD_SENTENCES.${d} blanks 下标在范围内且不重复`);
   });
+}
+const PHRASES = getConst("PHRASES");
+if (PHRASES) {
+  ok(PHRASES.length >= 12, "PHRASES ≥12 条");
+  ok(PHRASES.every(p => p.phrase && p.meaning), "PHRASES 每条含 phrase/meaning");
 }
 const PD = getConst("PHRASE_DETECTIVE");
 if (PD) {
   ok(PD.length >= 10, "PHRASE_DETECTIVE ≥10 条");
   ok(PD.every(q => q.desc && q.answer && Array.isArray(q.options) && q.options.length === 4 && q.options.includes(q.answer) && q.story && q.usage),
      "PHRASE_DETECTIVE 每条含 desc/answer/options[4]含answer/story/usage");
+  // 选项唯一正确答案检查
+  ok(PD.every(q => q.options.filter(o => o === q.answer).length === 1),
+     "PHRASE_DETECTIVE 每条 options 中 answer 恰好出现 1 次");
+}
+const WQ = getConst("WRITING_QUESTS");
+if (WQ) {
+  ok(WQ.length >= 3, "WRITING_QUESTS ≥3 题");
+  ok(WQ.every(q => q.topic && Array.isArray(q.requiredWords) && q.minWords && q.modelAnswer),
+     "WRITING_QUESTS 每条含 topic/requiredWords/minWords/modelAnswer");
+  ok(WQ.every(q => q.modelAnswer.split(/\s+/).length >= q.minWords),
+     "WRITING_QUESTS modelAnswer 字数 ≥ minWords");
+}
+const PT = getConst("PARAPHRASE_TASKS");
+if (PT) {
+  ok(PT.length >= 4, "PARAPHRASE_TASKS ≥4 题");
+  ok(PT.every(q => q.original && q.hint && Array.isArray(q.models) && q.models.length >= 2),
+     "PARAPHRASE_TASKS 每条含 original/hint/models[≥2]");
+  ok(PT.every(q => q.models.every(m => m.split(/\s+/).length >= 5)),
+     "PARAPHRASE_TASKS 每个 model 至少 5 词");
+}
+const ET = getConst("EXPANDER_TASKS");
+if (ET) {
+  ok(ET.length >= 3, "EXPANDER_TASKS ≥3 题");
+  ok(ET.every(q => q.quote && q.hint && Array.isArray(q.connectors) && q.modelAnswer),
+     "EXPANDER_TASKS 每条含 quote/hint/connectors/modelAnswer");
+  ok(ET.every(q => q.modelAnswer.split(/\s+/).length >= 30),
+     "EXPANDER_TASKS modelAnswer 至少 30 词");
 }
 const ME = getConst("MATCHING_ENDINGS");
 if (ME) {
@@ -167,7 +212,20 @@ if (KB) {
 }
 const CLOZE = getConst("CLOZE_DATA");
 if (CLOZE) {
-  ["writing","paraphrase","expander"].forEach(k => ok(Array.isArray(CLOZE[k]) && CLOZE[k].length > 0, `CLOZE_DATA.${k} 非空`));
+  ["writing","paraphrase","expander"].forEach(k => {
+    ok(Array.isArray(CLOZE[k]) && CLOZE[k].length > 0, `CLOZE_DATA.${k} 非空`);
+    // answers.length === parts.length - 1
+    if (Array.isArray(CLOZE[k])) {
+      let partsOk = true;
+      CLOZE[k].forEach((item, i) => {
+        if (!item.parts || !item.answers || item.parts.length !== item.answers.length + 1) {
+          partsOk = false;
+          console.error(`    ✗ CLOZE_DATA.${k}[${i}] parts.len=${item.parts?.length} answers.len=${item.answers?.length}`);
+        }
+      });
+      ok(partsOk, `CLOZE_DATA.${k} 每条 answers.length === parts.length - 1`);
+    }
+  });
 }
 const FRAME = getConst("FRAME_DATA");
 if (FRAME) {
