@@ -200,6 +200,9 @@ if (ME) {
   ok(ME.length >= 10, "MATCHING_ENDINGS ≥10 条");
   ok(ME.every(q => q.stem && Array.isArray(q.endings) && q.endings.length === 4 && q.note),
      "MATCHING_ENDINGS 每条含 stem/endings[4]/note");
+  // endings[0] 是正确答案，必须在数组中唯一出现（不与干扰项重复）
+  ok(ME.every(q => q.endings.filter(e => e === q.endings[0]).length === 1),
+     "MATCHING_ENDINGS endings[0]（正确答案）在 endings 中唯一出现");
 }
 const SB = getConst("SENTENCE_BUILDER");
 if (SB) {
@@ -224,6 +227,17 @@ if (CLOZE) {
         }
       });
       ok(partsOk, `CLOZE_DATA.${k} 每条 answers.length === parts.length - 1`);
+      // 每个答案必须存在于 bank 中，否则用户在词库里点不到正确答案
+      let bankOk = true;
+      CLOZE[k].forEach((item, i) => {
+        if (!item.bank || !item.answers) return;
+        const missing = item.answers.filter(a => !item.bank.includes(a));
+        if (missing.length > 0) {
+          bankOk = false;
+          console.error(`    ✗ CLOZE_DATA.${k}[${i}] answers 不在 bank 中: [${missing.join(", ")}]`);
+        }
+      });
+      ok(bankOk, `CLOZE_DATA.${k} 每个 answer 都存在于 bank 中`);
     }
   });
 }

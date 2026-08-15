@@ -26,7 +26,7 @@ This skill depends on the **full framework repo**, not just the skill definition
 | File | Purpose |
 |------|---------|
 | `game/index.html` | Game engine (10 games, fixed logic) |
-| `tests/regression.test.js` | 91-check regression suite |
+| `tests/regression.test.js` | 95-check regression suite |
 | `skills/english-game-factory/` | This skill (SKILL.md + content-spec + fetch script) |
 
 **Setup** (one-time, per machine):
@@ -55,7 +55,7 @@ Follow these steps in order. Read `references/content-spec.md` BEFORE generating
 
 Input may be a YouTube link or pasted text.
 
-- **YouTube link**: extract the video ID, then run `scripts/fetch_transcript.py <video_id_or_url>`. It prints the transcript to stdout. Requires the `youtube-transcript-api` package (install into the managed python venv if missing).
+- **YouTube link**: extract the video ID, then run `REPO/skills/english-game-factory/scripts/fetch_transcript.py <video_id_or_url>`. It prints the transcript to stdout. Requires the `youtube-transcript-api` package (install into the managed python venv if missing).
   - If the video has no English subtitle: fall back to audio download + Whisper transcription (needs `yt-dlp` and `ffmpeg`), or ask the user to paste the transcript.
 - **Pasted text**: use it directly. If very long, the user may paste in chunks — concatenate.
 
@@ -86,7 +86,7 @@ Write `data.js` following `references/content-spec.md` exactly. Key rules:
 - Run the regression test suite from the repo root:
   - `node REPO/tests/regression.test.js game` — tests the bundled sample (`game/data.js` + `game/index.html`)
   - `node REPO/tests/regression.test.js <dir>` — tests a custom content directory (relative to repo root)
-- All 91 checks must pass. The suite validates: data constants exist, structures match spec, blanks are in range and unique, CLOZE_DATA parts/answers align, choice questions have exactly one correct answer, model answers meet minimum word counts, and engine functions load without errors.
+- All 95 checks must pass. The suite validates: data constants exist, structures match spec, blanks are in range and unique, CLOZE_DATA parts/answers align and answers exist in bank, choice questions have exactly one correct answer, MATCHING_ENDINGS endings[0] is unique, model answers meet minimum word counts, and engine functions load without errors.
 
 ### 5. Deploy
 

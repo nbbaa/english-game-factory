@@ -211,7 +211,8 @@
 - [ ] 所有选择题 `options` 包含 `answer` 且只有 1 个正确项
 - [ ] `GOLD_SENTENCES` 的 `blanks` 下标不越界（`0 ≤ blank < wordCount`）、不重复
 - [ ] `SENTENCE_BUILDER` 无弱约束句对
-- [ ] `CLOZE_DATA` 的 `answers.length === parts.length - 1`
+- [ ] `CLOZE_DATA` 的 `answers.length === parts.length - 1`，且每个 answer 都存在于 `bank` 中
+- [ ] `MATCHING_ENDINGS` 的 `endings[0]`（正确答案）在 `endings` 中唯一出现
 - [ ] `WRITING_QUESTS` 的 `modelAnswer` 字数 ≥ `minWords`
 - [ ] `PARAPHRASE_TASKS` 每个 `model` 至少 5 词
 - [ ] `EXPANDER_TASKS` 的 `modelAnswer` 至少 30 词
@@ -219,5 +220,5 @@
 - [ ] 各选择类游戏的 `state.<game>Difficulty` 默认为 1、结算升降级逻辑就位
 - [ ] Daily Streak 顶栏/streakInfo/toast/徽章均读 `calcStreakFromDates()` 派生值
 - [ ] data.js 无裸换行、无未转义引号、无 `</script>` 注入
-- [ ] `node tests/regression.test.js` 全绿（91 项）
+- [ ] `node tests/regression.test.js` 全绿（95 项）
 - [ ] 部署并 curl 验证线上 data.js 是最新
